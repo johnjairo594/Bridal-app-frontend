@@ -17,12 +17,24 @@ importers:
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(vue@3.5.34)
+      sweetalert2:
+        specifier: ^11.26.25
+        version: 11.26.25
       vue:
         specifier: ^3.5.34
         version: 3.5.34
+      vue-multiselect:
+        specifier: ^3.5.0
+        version: 3.5.0
       vue-router:
         specifier: ^5.0.7
         version: 5.0.7(@vue/compiler-sfc@3.5.34)(pinia@3.0.4(vue@3.5.34))(vue@3.5.34)
+      vue-sonner:
+        specifier: ^2.0.9
+        version: 2.0.9
+      vue-sweetalert2:
+        specifier: ^5.0.11
+        version: 5.0.11(vue@3.5.34)
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^6.0.6
@@ -633,6 +645,12 @@ packages:
     resolution: {integrity: sha512-H+ue8Zo4vJmV2nRjpx86P35lzwDT3nItnIsocgumgr0hHMQ+ZGq5vrERg9kJBo5AWGmxZDhzDo+WVIJqkB0cGA==}
     engines: {node: '>=16'}
 
+  sweetalert2@11.26.25:
+    resolution: {integrity: sha512-+hunCOJdJ6FLj04T9YSLvvZXRjsvIkTeTKP2e4VF8CaBias961BTnWiSFAy7F/CM5eq3QK2Rraoc5Gzftslvkg==}
+
+  sweetalert2@11.4.4:
+    resolution: {integrity: sha512-9yYWQuRT1v9JNI/paPTSYV+68MHwe9C+HQ/I2jtfaFzoJgYRftWXOs4JqmDSjT7m2m4r8ebMMn8LcxD1Wq9B/w==}
+
   tinyglobby@0.2.16:
     resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
     engines: {node: '>=12.0.0'}
@@ -694,6 +712,10 @@ packages:
       yaml:
         optional: true
 
+  vue-multiselect@3.5.0:
+    resolution: {integrity: sha512-i758SEqWFcFshL1eAg0F3EFeFQ1mOCmh2mgnGCZv1XpHFVIAv8fxo8bQQ4ZnMoaPhMp8KI1A6gPBVHh3YzRg/Q==}
+    engines: {node: '>= 14.18.1', npm: '>= 6.14.15'}
+
   vue-router@5.0.7:
     resolution: {integrity: sha512-dqfk8kvRbCutmCOCj/XLDqDEYxc1wBdAOGLuVy5M93ifYMsBd5fIjfaPN4tQAbxr5IprdBDIox1gr4wYyOx/SA==}
     peerDependencies:
@@ -708,6 +730,25 @@ packages:
         optional: true
       pinia:
         optional: true
+
+  vue-sonner@2.0.9:
+    resolution: {integrity: sha512-i6BokNlNDL93fpzNxN/LZSn6D6MzlO+i3qXt6iVZne3x1k7R46d5HlFB4P8tYydhgqOrRbIZEsnRd3kG7qGXyw==}
+    peerDependencies:
+      '@nuxt/kit': ^4.0.3
+      '@nuxt/schema': ^4.0.3
+      nuxt: ^4.0.3
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      '@nuxt/schema':
+        optional: true
+      nuxt:
+        optional: true
+
+  vue-sweetalert2@5.0.11:
+    resolution: {integrity: sha512-agujdlcNeLb4Fj0/V3qgR7bEVBN8IzWFoDBP/vrSgbEGl9pjMmxnv32V3lxB0SZtQh6tL6R/UZ+C3q8tzsJbNg==}
+    peerDependencies:
+      vue: '*'
 
   vue@3.5.34:
     resolution: {integrity: sha512-WdLBG9gm02OgJIG9axd5Hpx0TFLdzVgfG2evFFu8Rur5O/IoGc5cMjnjh3tPL6GnRGsYvUhBSKVPYVcxRKpMCA==}
@@ -1281,6 +1322,10 @@ snapshots:
     dependencies:
       copy-anything: 4.0.5
 
+  sweetalert2@11.26.25: {}
+
+  sweetalert2@11.4.4: {}
+
   tinyglobby@0.2.16:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.4)
@@ -1313,6 +1358,8 @@ snapshots:
       fsevents: 2.3.3
       yaml: 2.9.0
 
+  vue-multiselect@3.5.0: {}
+
   vue-router@5.0.7(@vue/compiler-sfc@3.5.34)(pinia@3.0.4(vue@3.5.34))(vue@3.5.34):
     dependencies:
       '@babel/generator': 8.0.0-rc.5
@@ -1336,6 +1383,13 @@ snapshots:
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.34
       pinia: 3.0.4(vue@3.5.34)
+
+  vue-sonner@2.0.9: {}
+
+  vue-sweetalert2@5.0.11(vue@3.5.34):
+    dependencies:
+      sweetalert2: 11.4.4
+      vue: 3.5.34
 
   vue@3.5.34:
     dependencies:

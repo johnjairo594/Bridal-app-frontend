@@ -13,13 +13,25 @@ import {
 	CircleDashed,
 	Package,
 } from '@lucide/vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth.store'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+
+const userName = computed(() => {
+	const user = authStore.user ?? {}
+
+	return (
+		user?.person?.full_name ||
+		user?.full_name ||
+		user?.name ||
+		user?.username ||
+		'Usuario autenticado'
+	)
+})
 
 const props = defineProps({
     collapsed: {
@@ -64,16 +76,13 @@ const navigateTo = (targetRoute) => {
             </button>
 
             <div class="topbar-brand">
-                <span class="topbar-brand__logo">LOGO</span>
-                <span class="topbar-brand__divider"></span>
-                <span class="topbar-brand__title">Panel principal</span>
+                <span class="topbar-brand__title">TECNICENTRO BRIDAL 🔧</span>
             </div>
         </div>
 
         <div class="topbar-right">
             <div class="topbar-context">
-                <span class="topbar-context__label">Sección activa</span>
-                <strong class="topbar-context__value">{{ activeSection }}</strong>
+				<strong class="topbar-context__value">{{ userName }}</strong>
             </div>
 
             <div class="options-menu-wrapper">
@@ -104,8 +113,7 @@ const navigateTo = (targetRoute) => {
 	background: rgba(242, 242, 242, 0.88);
 	backdrop-filter: blur(16px);
 	border-radius: 20px;
-	min-height: 80px;
-	padding: 12px 16px;
+	padding: 10px 12px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -140,14 +148,6 @@ const navigateTo = (targetRoute) => {
 	height: 20px;
 }
 
-.topbar-brand__logo {
-	font-weight: 800;
-	letter-spacing: 0.16em;
-	font-size: 0.8rem;
-	text-transform: uppercase;
-	color: var(--color-azul-neutro);
-}
-
 .topbar-left,
 .topbar-right {
 	display: flex;
@@ -162,27 +162,18 @@ const navigateTo = (targetRoute) => {
 	min-width: 0;
 }
 
-.topbar-brand__divider {
-	width: 1px;
-	height: 24px;
-	background: rgba(111, 123, 191, 0.24);
-}
-
 .topbar-brand__title {
 	font-family: var(--font-heading);
 	color: var(--color-ink);
-	font-weight: 700;
+	font-weight: 800;
+	font-size: 1.25rem;
+	letter-spacing: 0.04em;
 }
 
 .topbar-context {
 	display: grid;
 	gap: 2px;
 	text-align: right;
-}
-
-.topbar-context__label {
-	font-size: 0.78rem;
-	color: var(--color-ink-soft);
 }
 
 .topbar-context__value {

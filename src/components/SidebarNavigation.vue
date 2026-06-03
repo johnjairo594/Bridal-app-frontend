@@ -28,7 +28,7 @@ defineEmits(['navigate'])
       @click="$emit('navigate', item.to)"
     >
       <span class="sidebar-link-icon" aria-hidden="true">
-        <component :is="item.icon" />
+        <component :is="item.icon" size="5"/>
       </span>
       <span class="sidebar-link-label">{{ item.label }}</span>
     </button>
@@ -107,8 +107,8 @@ defineEmits(['navigate'])
 	appearance: none;
 	border: 0;
 	border-radius: 12px;
-	padding: 14px 16px;
-  margin-bottom: 8px;
+	padding: 8px 10px;
+  	margin-bottom: 8px;
 	display: flex;
 	align-items: center;
 	gap: 12px;
@@ -116,7 +116,7 @@ defineEmits(['navigate'])
 	color: var(--color-ink-soft);
 	text-align: left;
 	width: 100%;
-	min-height: 52px;
+	min-height: 40px;
 	cursor: pointer;
 
 	transition:
@@ -159,13 +159,14 @@ defineEmits(['navigate'])
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: 16px;
 }
 
 /* COLLAPSED */
 
 .is-collapsed .sidebar-link {
 	justify-content: center;
-	padding: 14px 0;
+	padding: 4px 0;
 	gap: 0;
 }
 

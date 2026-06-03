@@ -86,39 +86,45 @@ const navigateTo = (targetRoute) => {
 	background: rgba(242, 242, 242, 0.9);
 	backdrop-filter: blur(16px);
 	box-shadow: var(--color-shadow);
-	padding: 18px;
+	padding: 12px;
 	display: grid;
-	gap: 18px;
+	gap: 12px;
 	overflow: hidden;
 	transition: width 220ms ease, padding 220ms ease;
 }
 
 .main-sidebar.is-collapsed {
-	width: 72px;
+	width: 52px;
 	padding-inline: 10px;
 }
 
 .main-page.sidebar-collapsed {
-	grid-template-columns: 72px minmax(0, 1fr);
+	grid-template-columns: 52px minmax(0, 1fr);
 }
 .main-page {
 min-height: 100svh;
 display: grid;
-grid-template-columns: 292px minmax(0, 1fr);
-gap: 12px;
-padding: 12px;
+grid-template-columns: 240px minmax(0, 1fr);
+grid-template-rows: minmax(0, 1fr);
+gap: 8px;
+padding: 8px;
 
 transition: grid-template-columns 220ms ease;
 
 }
 .main-shell {
-    min-width: 0;
+	min-width: 0;
+	min-height: 0;
+	display: flex;
 }
 
 .main-content {
-    min-width: 0;
-    display: grid;
-    gap: 18px;
+	min-width: 0;
+	min-height: 0;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 }
 
 @media (max-width: 1200px) {

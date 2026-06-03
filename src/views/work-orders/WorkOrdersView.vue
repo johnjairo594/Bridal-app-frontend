@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { getWorkOrders } from '../../services/work-orders.service'
 import { getUsers } from '../../services/users.service'
 import { Eye, Trash2, PencilLine, Search } from '@lucide/vue'
+import WorkOrderFormDrawer from '../../components/WorkOrderFormDrawer.vue'
 
 const formatDateInput = (date) => {
     return date.toLocaleDateString('en-CA')
@@ -16,6 +17,9 @@ sevenDaysAgo.setDate(today.getDate() - 7)
 const loading = ref(false)
 const workOrders = ref([])
 const pagination = ref({})
+const showCreateDrawer = ref(false)
+const drawerMode = ref('create')
+const selectedWorkOrderId = ref(null)
 
 const currentPage = ref(1)
 const searchTerm = ref('')
@@ -91,6 +95,24 @@ const changePage = (page) => {
     loadWorkOrders(page)
 }
 
+const openCreateDrawer = () => {
+    drawerMode.value = 'create'
+    selectedWorkOrderId.value = null
+    showCreateDrawer.value = true
+}
+
+const openEditDrawer = (workOrder) => {
+    drawerMode.value = 'edit'
+    selectedWorkOrderId.value = workOrder.id
+    showCreateDrawer.value = true
+}
+
+const closeDrawer = () => {
+    showCreateDrawer.value = false
+    selectedWorkOrderId.value = null
+    drawerMode.value = 'create'
+}
+
 onMounted(() => {
     loadMechanics()
     loadWorkOrders()
@@ -116,6 +138,7 @@ onMounted(() => {
                     <button
                         type="button"
                         class="primary-button"
+                        @click="openCreateDrawer"
                     >
                         Nuevo
                     </button>
@@ -155,11 +178,14 @@ onMounted(() => {
                                 @change="applyFiltersFromChange"
                             >
                                 <option value="">Todos los estados</option>
-                                <option value="EN PROCESO">
+                                <option value="PROCESO">
                                     En proceso
                                 </option>
                                 <option value="FINALIZADO">
                                     Finalizado
+                                </option>
+                                <option value="CANCELADO">
+                                    Cancelado
                                 </option>
                             </select>
                         </div>
@@ -213,7 +239,7 @@ onMounted(() => {
                 <table class="custom-table">
                     <thead>
                         <tr>
-                            <th class="sticky-column sticky-id">
+                            <th class="sticky-column sticky-id" style="text-align: center;">
                                 ID
                             </th>
 
@@ -238,12 +264,12 @@ onMounted(() => {
                         </tr>
                     </thead>
 
-                    <tbody v-if="!loading">
+                    <tbody v-if="!loading && workOrders.length">
                         <tr
                             v-for="workOrder in workOrders"
                             :key="workOrder.id"
                         >
-                            <td class="sticky-column sticky-id">
+                            <td class="sticky-column sticky-id" style="text-align: center;">
                                 {{ workOrder.id }}
                             </td>
 
@@ -278,11 +304,20 @@ onMounted(() => {
                             </td>
 
                             <td>
-                                {{ workOrder.status }}
+                                <span
+                                    class="status-badge"
+                                    :class="{
+                                        'status-badge--process': workOrder.status === 'PROCESO',
+                                        'status-badge--completed': workOrder.status === 'FINALIZADO',
+                                        'status-badge--canceled': workOrder.status === 'CANCELADO',
+                                    }"
+                                >
+                                    {{ workOrder.status }}
+                                </span>
                             </td>
 
                             <td>
-                                ${{ workOrder.total_price }}
+                                ${{ workOrder.total_price || '0.00' }}
                             </td>
 
                             <td>
@@ -291,27 +326,37 @@ onMounted(() => {
                             <td>
                                 {{ workOrder.finish_date || '---' }}
                             </td>
-                            <td class="sticky-column sticky-actions">
+                            <td class="sticky-column sticky-actions multiline-cell">
                                 <div class="actions-wrapper">
                                     <button
                                         type="button"
                                         class="options-button"
                                     >
-                                        <Eye color="blue"/>
+                                        <Eye color="blue" size="20" />
+                                    </button>
+                                    <button
+                                        v-if="workOrder.status !== 'FINALIZADO' && workOrder.status !== 'CANCELADO'"
+                                        type="button"
+                                        class="options-button"
+                                        @click="openEditDrawer(workOrder)"
+                                    >
+                                        <PencilLine color="green" size="20" />
                                     </button>
                                     <button
                                         type="button"
                                         class="options-button"
                                     >
-                                        <PencilLine color="green" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        class="options-button"
-                                    >
-                                        <Trash2 color="red"/>
+                                        <Trash2 color="red" size="20" />
                                     </button>
                                 </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <tbody v-else-if="!loading && workOrders.length === 0">
+                        <tr>
+                            <td colspan="10" style="text-align: center; padding: 20px;">
+                                No se encontraron registros con los filtros seleccionados.
                             </td>
                         </tr>
                     </tbody>
@@ -327,7 +372,10 @@ onMounted(() => {
             </div>
 
             <div class="pagination">
-                <div>
+                <div v-if="pagination.total === 0" >
+                    Mostrando: 0
+                </div>
+                <div v-else >
                     Mostrando: {{ pagination.from }} a {{ pagination.to }} de {{ pagination.total }}
                 </div>
                 <div class="pagination-buttons">
@@ -345,9 +393,22 @@ onMounted(() => {
             </div>
         </div>
     </div>
+    <WorkOrderFormDrawer
+        :open="showCreateDrawer"
+        :mode="drawerMode"
+        :work-order-id="selectedWorkOrderId"
+        @close="closeDrawer"
+        @saved="loadWorkOrders(currentPage)"
+    />
 </template>
 
 <style scoped>
+
+.full-page-content {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+}
 
 .custom-table {
     width: 100%;
@@ -370,9 +431,9 @@ onMounted(() => {
 
 .custom-table th,
 .custom-table td {
-    padding: 12px;
+    padding: 7px;
     text-align: left;
-    font-size: 14px;
+    font-size: 12px;
     white-space: nowrap;
     background: white;
 
@@ -434,7 +495,6 @@ thead .sticky-column {
     justify-content: center;
 
     right: -1px;
-    min-width: 160px;
     max-width: 100%;
     text-align: center;
     z-index: 15;
@@ -453,7 +513,7 @@ thead .sticky-column {
     border: 1px solid var(--color-border);
     background: white;
     border-radius: 10px;
-    padding: 6px;
+    padding: 4px;
     cursor: pointer;
     transition: 160ms ease;
 
@@ -469,9 +529,10 @@ thead .sticky-column {
 .pagination {
     display: flex;
     gap: 8px;
-    margin-top: 20px;
+    margin-top: 6px;
     flex-wrap: wrap;
     justify-content: space-between;
+    font-size: 14px;
 }
 
 .pagination-buttons {
@@ -565,6 +626,7 @@ thead .sticky-column {
 .filters-right {
     display: flex;
     align-items: center;
+    align-self: end;
     gap: 12px;
     flex-wrap: wrap;
 }
@@ -572,12 +634,12 @@ thead .sticky-column {
 .table-select,
 .table-input,
 .table-search {
-    height: 42px;
+    height: 36px;
     border: 1px solid var(--color-border);
     border-radius: 12px;
     background: white;
-    padding-inline: 14px;
-    font-size: 14px;
+    padding-inline: 12px;
+    font-size: 12px;
     outline: none;
 }
 

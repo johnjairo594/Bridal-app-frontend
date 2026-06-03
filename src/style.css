@@ -1,9 +1,14 @@
 :root {
   --color-azul-neutro: #6f7bbf;
+  --color-azul: #1d4ed8;
+  --color-azul-claro: #dbeafe;
   --color-amarillo: #d9b504;
   --color-celeste: #89b9ee;
   --color-rojo: #bf3604;
+  --color-rojo-claro: #fcd9d5;
   --color-blanco: #f2f2f2;
+  --color-verde-claro: #dcfce7;
+  --color-verde-neutro: #15803d;
   --color-ink: #1e2436;
   --color-ink-soft: #5d6478;
   --color-surface: rgba(242, 242, 242, 0.88);
@@ -70,14 +75,13 @@ input::placeholder {
 		radial-gradient(circle at top right, rgba(137, 185, 238, 0.18), transparent 34%),
 		linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(242, 242, 242, 0.86));
   border-radius: 20px;
-	padding: 28px;
 	display: flex;
   flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
 	gap: 20px;
 	box-shadow: var(--color-shadow);
-  padding: 40px 20px;
+  padding: 24px 20px;
   min-width: 0;
   overflow: hidden;
 }
@@ -167,6 +171,28 @@ input::placeholder {
     border-radius: 50%;
     display: inline-block;
     animation: spin 0.6s linear infinite;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.5rem;
+    border-radius: 12px;
+}
+
+.status-badge--process {
+    background-color: var(--color-azul-claro);
+    border: 1px solid var(--color-azul);
+}
+
+.status-badge--completed {
+    background-color: var(--color-verde-claro);
+    border: 1px solid var(--color-verde-neutro);
+}
+
+.status-badge--canceled {
+    background-color: var(--color-rojo-claro);
+    border: 1px solid var(--color-rojo);
 }
 
 @keyframes spin {
