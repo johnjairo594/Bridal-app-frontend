@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getWorkOrders } from '../../services/work-orders.service'
+import { getWorkOrders, deleteWorkOrder } from '../../services/work-orders.service'
 import { getUsers } from '../../services/users.service'
 import { Eye, Trash2, PencilLine, Search } from '@lucide/vue'
 import WorkOrderFormDrawer from '../../components/WorkOrderFormDrawer.vue'
+import WorkOrderDetailsDrawer from '../../components/WorkOrderDetailsDrawer.vue'
+import Swal from 'sweetalert2'
 
 const formatDateInput = (date) => {
     return date.toLocaleDateString('en-CA')
@@ -18,8 +20,10 @@ const loading = ref(false)
 const workOrders = ref([])
 const pagination = ref({})
 const showCreateDrawer = ref(false)
+const showDetailsDrawer = ref(false)
 const drawerMode = ref('create')
 const selectedWorkOrderId = ref(null)
+const selectedWorkOrderDetailsId = ref(null)
 
 const currentPage = ref(1)
 const searchTerm = ref('')
@@ -107,10 +111,59 @@ const openEditDrawer = (workOrder) => {
     showCreateDrawer.value = true
 }
 
+const openDetailsDrawer = (workOrder) => {
+    selectedWorkOrderDetailsId.value = workOrder.id
+    showDetailsDrawer.value = true
+}
+
+const handleDeleteWorkOrder = async (workOrder) => {
+    const result = await Swal.fire({
+        title: 'Eliminar orden de trabajo',
+        text: `¿Desea eliminar la orden #${workOrder.id}? Esta acción no se puede deshacer.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#bf3604',
+        cancelButtonColor: '#6f7bbf',
+    })
+
+    if (!result.isConfirmed) {
+        return
+    }
+
+    try {
+        await deleteWorkOrder(workOrder.id)
+
+        await Swal.fire({
+            title: 'Eliminada',
+            text: 'La orden de trabajo fue eliminada correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+        })
+
+        await loadWorkOrders(currentPage.value)
+    } catch (error) {
+        const message = error?.response?.data?.message || 'No se pudo eliminar la orden de trabajo'
+
+        await Swal.fire({
+            title: 'Error',
+            text: message,
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+        })
+    }
+}
+
 const closeDrawer = () => {
     showCreateDrawer.value = false
     selectedWorkOrderId.value = null
     drawerMode.value = 'create'
+}
+
+const closeDetailsDrawer = () => {
+    showDetailsDrawer.value = false
+    selectedWorkOrderDetailsId.value = null
 }
 
 onMounted(() => {
@@ -331,6 +384,7 @@ onMounted(() => {
                                     <button
                                         type="button"
                                         class="options-button"
+                                        @click="openDetailsDrawer(workOrder)"
                                     >
                                         <Eye color="blue" size="20" />
                                     </button>
@@ -345,6 +399,7 @@ onMounted(() => {
                                     <button
                                         type="button"
                                         class="options-button"
+                                        @click="handleDeleteWorkOrder(workOrder)"
                                     >
                                         <Trash2 color="red" size="20" />
                                     </button>
@@ -399,6 +454,11 @@ onMounted(() => {
         :work-order-id="selectedWorkOrderId"
         @close="closeDrawer"
         @saved="loadWorkOrders(currentPage)"
+    />
+    <WorkOrderDetailsDrawer
+        :open="showDetailsDrawer"
+        :work-order-id="selectedWorkOrderDetailsId"
+        @close="closeDetailsDrawer"
     />
 </template>
 

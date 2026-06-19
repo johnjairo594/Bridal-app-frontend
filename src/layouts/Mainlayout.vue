@@ -10,7 +10,7 @@ import {
 	LogOut,
 	PanelLeftClose,
 	LayoutDashboard,
-	BriefcaseBusiness,
+	Wrench,
 	FileText,
 	Users,
 	CalendarDays,
@@ -27,12 +27,7 @@ const sidebarCollapsed = ref(false)
 
 const navigationItems = [
 	{ label: 'Inicio', to: '/inicio', icon: LayoutDashboard },
-	{ label: 'Work Orders', to: '/ordenes-trabajo', icon: BriefcaseBusiness },
-	{ label: 'Cotizaciones', to: '/quotes', icon: FileText },
-	{ label: 'Clientes', to: '/customers', icon: Users },
-	{ label: 'Citas', to: '/appointments', icon: CalendarDays },
-	{ label: 'Facturación', to: '/billing', icon: BadgeDollarSign },
-	{ label: 'Inventario', to: '/inventory', icon: Package },
+	{ label: 'Órdenes de trabajo', to: '/ordenes-trabajo', icon: Wrench },
 ]
 
 const activeSection = computed(() => {

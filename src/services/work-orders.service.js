@@ -38,12 +38,18 @@ export const createWorkOrder = async (workOrderData) => {
 
 export const getWorkOrderById = async (id) => {
   const response = await api.get(`/work-orders/${id}`)
-  // Additional detail fetch logic can be added here if needed
+
   return response.data
 }
 
 export const updateWorkOrder = async (id, workOrderData) => {
   const response = await api.put(`/work-orders/${id}`, workOrderData)
+
+  return response.data
+}
+
+export const deleteWorkOrder = async (id) => {
+  const response = await api.delete(`/work-orders/${id}`)
 
   return response.data
 }
